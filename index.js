@@ -16,10 +16,6 @@ app.use(express.json({ extend: true }));
 app.set("view engine", "ejs");
 
 //routes
-app.get('/', function (req, res) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.send('hello world')
-})
 app.use('/api',require('./routes/router'));
 
 var server_port = process.env.YOUR_PORT || process.env.PORT || 80;

@@ -28,7 +28,6 @@ exports.addTreatment = async (req, res) => {
 
 exports.getTreatments = async (req, res) => {
   const { id_paciente, limit = 5, page } = req.query;
-  console.log(req.query);
   try {
     const paciente = await Paciente.findById(id_paciente);
     if (!paciente) {

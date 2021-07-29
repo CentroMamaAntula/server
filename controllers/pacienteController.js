@@ -28,7 +28,8 @@ exports.addPaciente = async (req, res) => {
 
 exports.getPaciente = async (req, res) => {
   const { q } = req.query;
-  var pacientes = null;
+  let pacientes = null;
+  console.log(q)
   try {
     if (isNaN(q)) {
       pacientes = await Paciente.find({ $text: { $search: q } });

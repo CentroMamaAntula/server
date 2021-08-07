@@ -4,7 +4,7 @@ const path = require('path');
 dotenv.config({
   path: path.resolve(process.env.NODE_ENV + '.env')
 });
-console.log(process.env.DB_MONGO);
+
 module.exports = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   HOST: process.env.HOST || '127.0.0.1',

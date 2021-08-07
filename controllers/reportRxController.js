@@ -4,6 +4,7 @@ const fs = require("fs-extra");
 var path = require("path");
 const { validationResult } = require("express-validator");
 const { Storage } = require("@google-cloud/storage");
+const role = require('../utils/role')
 
 // Creates a client
 const storage = new Storage({
@@ -12,7 +13,7 @@ const storage = new Storage({
 });
 
 exports.addReportRx = async (req, res) => {
-  if (req.user.role === 4) {
+  if (req.user.role === role.RAYOS) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log(errors);

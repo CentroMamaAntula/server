@@ -1,11 +1,12 @@
 const MentalEvolution = require("../models/MentalEvolution");
 const MentalQuery = require("../models/MentalQuery");
 const { validationResult } = require("express-validator");
+const role = require('../utils/role')
 
 /* 1: medico, 2: enfermero, 3: salud mental*/
 
 exports.addMentalEvolution = async (req, res) => {
-  if (req.user.role === 3) {
+  if (req.user.role === role.SALUD_MENTAL) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ msg: errors.array() });
@@ -40,7 +41,7 @@ exports.getMentalEvolution = async (req, res) => {
         .json({ msg: "No existe Consulta de Salud Mental" });
     }
     let mentalEvolution;
-    if (req.user.role === 3) {
+    if (req.user.role === role.SALUD_MENTAL) {
       mentalEvolution = await MentalEvolution.find({
         id_mentalquery: mentalQuery._id,
       })
@@ -48,7 +49,7 @@ exports.getMentalEvolution = async (req, res) => {
           date: -1,
         })
         .populate("professional_name", "name");
-    } else if (req.user.role === 1) {
+    } else if (req.user.role === role.MEDICO) {
       mentalEvolution = await MentalEvolution.find({
         id_mentalquery: mentalQuery._id,
       })

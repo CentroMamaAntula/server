@@ -1,11 +1,12 @@
 const Epicrisis = require("../models/Epicrisis");
 const Activity = require("../models/Activity");
 const { validationResult } = require("express-validator");
+const role = require('../utils/role')
 
 /* 1: medico, 2: enfermero, 3: salud mental*/
 
 exports.addEpicrisis = async (req, res) => {
-  if (req.user.role === 1) {
+  if (req.user.role === role.MEDICO) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ msg: errors.array() });
@@ -38,7 +39,7 @@ exports.getEpicrisis = async (req, res) => {
         .json({ msg: "No existe Consulta de Salud Mental" });
     }
     let epicrisis = [];
-    if (req.user.role === 1) {
+    if (req.user.role === role.MEDICO) {
       epicrisis = await Epicrisis.find({
         id_activity: activity._id,
       }).sort({

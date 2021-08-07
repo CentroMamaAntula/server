@@ -2,6 +2,8 @@ const User = require("../models/User");
 const bcryptjs = require("bcryptjs");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
+const config = require('../config/var');
+
 
 exports.login = async (req, res) => {
   const errors = validationResult(req);
@@ -29,10 +31,9 @@ exports.login = async (req, res) => {
         role: user.role,
       },
     };
-
     jwt.sign(
       payload,
-      process.env.SECRETA,
+      config.SECRETA,
       {
         expiresIn: 21600,
       },

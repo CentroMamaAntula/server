@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const config = require('./config/var');
 global["XMLHttpRequest"] = require("xmlhttprequest").XMLHttpRequest;
 
 const app = express();
@@ -18,8 +19,8 @@ app.set("view engine", "ejs");
 //routes
 app.use('/api',require('./routes/router'));
 
-var server_port = process.env.YOUR_PORT || process.env.PORT || 4000;
-var server_host = process.env.YOUR_HOST || "0.0.0.0";
+var server_port = config.PORT;
+var server_host = config.HOST;
 
 app.listen(server_port, server_host, () => {
   console.log(

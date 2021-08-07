@@ -17,7 +17,7 @@ const UserSchema = mongoose.Schema({
   },
   role: {
     /* 1: medico, 2: enfermero, 3: salud mental 4: rayos*/
-    type: Number,
+    type: String,
     required: true,
   },
   to_register: {

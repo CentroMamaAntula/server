@@ -13,9 +13,11 @@ exports.addEvolution = async (req, res) => {
       if (!paciente) {
         return res.status(400).json({ msg: "No existe paciente" });
       }
-      var evolution = new Report(req.body);
-      await evolution.save();
-      res.json(evolution);
+      let report = new Report(req.body);
+      report.save().then( async (r, error) => {
+        await r.populate("professional_name").execPopulate();
+        res.json(report);
+      });
     } catch (e) {
       console.log(e);
       res.status(500).send("Hubo un error");
@@ -28,12 +30,13 @@ exports.addEvolution = async (req, res) => {
 
 exports.getEvolution = async (req, res) => {
   const { id_paciente, limit = 10, page } = req.query;
+  console.log(id_paciente)
   try {
     const paciente = await Paciente.findById(id_paciente);
     if (!paciente) {
       return res.status(400).json({ msg: "No existe paciente" });
     }
-    let evolution = await Report.find({
+    let report = await Report.find({
       id_paciente: paciente._id,
     })
       .sort({
@@ -46,13 +49,13 @@ exports.getEvolution = async (req, res) => {
     const count = await Report.countDocuments({
       id_paciente: id_paciente,
     });
-    evolution = {
-      evolutions: [...evolution],
+    report = {
+      reports: [...report],
       totalPages: Math.ceil(count / limit),
       currentPage: page,
       total: count,
     };
-    res.json(evolution);
+    res.json(report);
   } catch (e) {
     console.log(e);
     res.status(500).json({ msg: "Hubo un error" });

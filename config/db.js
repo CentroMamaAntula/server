@@ -6,6 +6,7 @@ const config = require('./var');
 const connectDB = async () => {
   try {
     await mongoose.connect(config.DB_MONGO, {
+      useCreateIndex: true,
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,

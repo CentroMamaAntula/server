@@ -29,7 +29,7 @@ exports.addPaciente = async (req, res) => {
 exports.getPaciente = async (req, res) => {
   const { q } = req.query;
   let pacientes = null;
-  console.log(q)
+  console.log(`${new Date().toLocaleDateString()}: ${q}`)
   try {
     if (isNaN(q)) {
       pacientes = await Paciente.find({ $text: { $search: q } });

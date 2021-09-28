@@ -12,6 +12,9 @@ router.post(
   reportController.addEvolution
 );
 
-router.get("/", auth, reportController.getEvolution);
+router.get(
+  "/", 
+  auth, 
+  reportController.getEvolution);
 
 module.exports = router;

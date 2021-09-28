@@ -16,7 +16,7 @@ exports.addDiagnostic = async (req, res) => {
     await diagnostic.save();
     res.json(diagnostic);
   } catch (e) {
-    console.log(error);
+    console.log(e);
     res.status(500).send("Hubo un error");
   }
 };

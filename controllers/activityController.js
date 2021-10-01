@@ -71,7 +71,7 @@ exports.addActivity = async (req, res) => {
 };
 
 exports.getActivity = async (req, res) => {
-  const { id_paciente, limit = 2, page } = req.query;
+  const { id_paciente, limit = 2, page = 1 } = req.query;
   try {
     const paciente = await Paciente.findById(id_paciente);
     if (!paciente) {

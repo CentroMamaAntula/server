@@ -1,8 +1,8 @@
-const HistoryCurrent = require("../models/HistoryCurrent");
-const Paciente = require("../models/Paciente");
+const Application = require("../../models/hemotherapy/Application");
+const Paciente = require("../../models/Paciente");
 const { validationResult } = require("express-validator");
 
-exports.addHistoryCurrent = async (req, res) => {
+exports.addApplication = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -13,9 +13,11 @@ exports.addHistoryCurrent = async (req, res) => {
       if (!paciente) {
         return res.status(400).json({ msg: "No existe paciente" });
       }
-      const historyCurrent = new HistoryCurrent(req.body);
-      await historyCurrent.save();
-      res.json(historyCurrent);
+      let application = new Application(req.body);
+      application.save().then( async ( result, error ) => {
+        await result.populate("professional_name").execPopulate();
+        res.json(result);
+      });
     } catch (e) {
       console.log(e);
       res.status(500).send("Hubo un error");
@@ -26,14 +28,16 @@ exports.addHistoryCurrent = async (req, res) => {
   }
 };
 
-exports.getHistoryCurrents = async (req, res) => {
-  const { id_paciente, limit = 3, page = 1 } = req.query;
+exports.getApplication = async (req, res) => {
+  const { id_paciente, limit = 10, page = 1 } = req.query;
   try {
     const paciente = await Paciente.findById(id_paciente);
     if (!paciente) {
       return res.status(400).json({ msg: "No existe paciente" });
     }
-    let historyCurrent = await HistoryCurrent.find({ id_paciente: paciente._id })
+    let application = await Application.find({
+      id_paciente: paciente._id,
+    })
       .sort({
         date: -1,
       })
@@ -41,14 +45,16 @@ exports.getHistoryCurrents = async (req, res) => {
       .skip((page - 1) * limit)
       .populate("professional_name", "name")
       .exec();
-    const count = await HistoryCurrent.countDocuments({ id_paciente: id_paciente });
-    historyCurrent = {
-      historyCurrents: [...historyCurrent],
+    const count = await Application.countDocuments({
+      id_paciente: id_paciente,
+    });
+    application = {
+      applications: [...application],
       totalPages: Math.ceil(count / limit),
       currentPage: page,
       total: count,
     };
-    res.json(historyCurrent);
+    res.json(application);
   } catch (e) {
     console.log(e);
     res.status(500).json({ msg: "Hubo un error" });

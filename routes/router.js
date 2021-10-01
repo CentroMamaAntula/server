@@ -30,6 +30,7 @@ router.use("/orderrx", require("./orderRx"));
 router.use("/reportrx", require("./reportRx"));
 
 router.use("/kinesiology", require("./kinesiology/router"));
+router.use("/hemotherapy", require("./hemotherapy/router"));
 router.use("/nutrition", require("./nutrition/router"));
 router.use("/laboratory", require("./bloodTest/router"));
 router.use("/statistics", require("./statistics/router"));

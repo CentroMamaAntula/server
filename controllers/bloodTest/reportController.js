@@ -29,7 +29,7 @@ exports.addEvolution = async (req, res) => {
 };
 
 exports.getEvolution = async (req, res) => {
-  const { id_paciente, limit = 10, page } = req.query;
+  const { id_paciente, limit = 10, page = 1 } = req.query;
   console.log(id_paciente)
   try {
     const paciente = await Paciente.findById(id_paciente);

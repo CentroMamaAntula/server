@@ -27,7 +27,7 @@ exports.addSAPS = async (req, res) => {
 };
 
 exports.getSAPS = async (req, res) => {
-  const { id_paciente, limit = 3, page } = req.query;
+  const { id_paciente, limit = 3, page = 1 } = req.query;
   try {
     const paciente = await Paciente.findById(id_paciente);
     if (!paciente) {

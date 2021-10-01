@@ -13,7 +13,7 @@ exports.addEvolutionNut = async (req, res) => {
       if (!paciente) {
         return res.status(400).json({ msg: "No existe paciente" });
       }
-      var evolution = new EvolutionNut(req.body);
+      let evolution = new EvolutionNut(req.body);
       await evolution.save();
       res.json(evolution);
     } catch (e) {

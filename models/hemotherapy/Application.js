@@ -7,11 +7,9 @@ const ApplicationHemoSchema = mongoose.Schema({
   },
   hemocomponente: {
     type: String,
-    required: true,
   },
   numUnidad: {
     type: Number,
-    required: true,
   },
   tecnicas: {
     type: String,

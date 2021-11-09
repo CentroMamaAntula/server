@@ -15,8 +15,9 @@ const statisticsController = require("../../controllers/statistics/statisticsCon
 router.get(
   "/",
   auth,
-  [check("type", "El tipo es obligatorio").notEmpty()],
-  [check("from", "Fecha desde es obligatorio").notEmpty()],
+  [check("model", "El tipo es obligatorio").notEmpty()],
+/*   [check("type", "El tipo es obligatorio").notEmpty()],
+ */  [check("from", "Fecha desde es obligatorio").notEmpty()],
   [check("to", "Fecha hasta es obligatorio").notEmpty()],
   statisticsController.getActivityFromTo
 );

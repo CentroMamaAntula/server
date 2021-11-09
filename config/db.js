@@ -5,12 +5,7 @@ const config = require('./var');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(config.DB_MONGO, {
-      useCreateIndex: true,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    });
+    await mongoose.connect(config.DB_MONGO);
     console.log("==============");
     console.log("  DB Connect");
     console.log("==============");

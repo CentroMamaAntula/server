@@ -1,6 +1,19 @@
 const Activity = require("../../models/Activity");
+const MentalEvolution = require("../../models/MentalEvolution");
+const MentalQuery = require("../../models/MentalQuery");
 const Paciente = require("../../models/Paciente");
 const { validationResult } = require("express-validator");
+
+const MODEL = {
+  Activity,
+  MentalEvolution,
+  MentalQuery
+};
+const POPULATE = {
+  Activity: 'id_paciente',
+  MentalEvolution: 'id_mentalquery',
+  MentalQuery: 'id_paciente'
+};
 
 exports.getActivityFromTo = async (req, res) => {
   try {
@@ -9,9 +22,10 @@ exports.getActivityFromTo = async (req, res) => {
       return res.status(400).json({ msg: errors.array() });
     }
     try {
-      const { type, from, to } = req.query;
+      const { model, type = undefined, from, to } = req.query;
+
       const oneDay = 24 * 60 * 60 * 1000;
-      const activities = await Activity.find({
+      const activities = await MODEL[model].find({
         date: {
           $gt: new Date(from).getTime(),
           $lte: new Date(to).getTime() + oneDay,
@@ -21,7 +35,7 @@ exports.getActivityFromTo = async (req, res) => {
         .sort({
           date: 1,
         })
-        .populate("id_paciente")
+        .populate(POPULATE[model])
         .exec();
       res.json(activities);
     } catch (error) {

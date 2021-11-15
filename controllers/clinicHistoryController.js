@@ -9,42 +9,63 @@ const Diagnostic = require("../models/Diagnostic");
 exports.getClinicHistory = async (req, res) => {
   try {
     let count = 0;
-    const { id_paciente } = req.query;
-    let treatment = await Treatment.find({ id_paciente: id_paciente })
+    const { id_paciente, to = undefined, from = undefined, limit = 1000 } = req.query;
+    let query = { id_paciente };
+    const oneDay = 24 * 60 * 60 * 1000;
+    let date = to ? {
+      $lte: new Date(to).getTime() + oneDay,
+    } : null;
+    date = from ?
+      date ? {
+        $gt: new Date(from).getTime(),
+        ...date,
+      }
+        : {
+          $gt: new Date(from).getTime(),
+          ...date,
+        }
+      : date;
+    if (date) {
+      query = {
+        date,
+        ...query,
+      }
+    }
+    let treatment = await Treatment.find(query)
       .sort({ date: -1 })
-      .limit(5)
+      .limit(limit)
       .populate("professional_name", "name")
       .exec();
-    count = await Treatment.countDocuments({ id_paciente: id_paciente });
+    count = await Treatment.countDocuments(query);
     treatment = {
       treatments: [...treatment],
-      totalPages: Math.ceil(count / 5),
+      totalPages: count > limit ? Math.ceil(count / limit) : 1,
       currentPage: 1,
       total: count,
     };
 
-    let historyCurrent = await HistoryCurrent.find({ id_paciente: id_paciente })
+    let historyCurrent = await HistoryCurrent.find(query)
       .sort({ date: -1 })
-      .limit(3)
+      .limit(limit)
       .populate("professional_name", "name")
       .exec();
-    count = await HistoryCurrent.countDocuments({ id_paciente: id_paciente });
+    count = await HistoryCurrent.countDocuments(query);
     historyCurrent = {
       historyCurrents: [...historyCurrent],
-      totalPages: Math.ceil(count / 3),
+      totalPages: count > limit ? Math.ceil(count / limit) : 1,
       currentPage: 1,
       total: count,
     };
 
-    let physicalExam = await PhysicalExam.find({ id_paciente: id_paciente })
+    let physicalExam = await PhysicalExam.find(query)
       .sort({ date: -1 })
-      .limit(5)
+      .limit(limit)
       .populate("professional_name", "name")
       .exec();
-    count = await PhysicalExam.countDocuments({ id_paciente: id_paciente });
+    count = await PhysicalExam.countDocuments(query);
     physicalExam = {
       physicalExams: [...physicalExam],
-      totalPages: Math.ceil(count / 5),
+      totalPages: count > limit ? Math.ceil(count / limit) : 1,
       currentPage: 1,
       total: count,
     };
@@ -53,40 +74,40 @@ exports.getClinicHistory = async (req, res) => {
       id_paciente: id_paciente,
     });
 
-    let hisopado = await Hisopado.find({ id_paciente: id_paciente })
+    let hisopado = await Hisopado.find(query)
       .sort({ date: -1 })
-      .limit(2)
+      .limit(limit)
       .exec();
-    count = await Hisopado.countDocuments({ id_paciente: id_paciente });
+    count = await Hisopado.countDocuments(query);
     hisopado = {
       hisopados: [...hisopado],
-      totalPages: Math.ceil(count / 2),
+      totalPages: count > limit ? Math.ceil(count / limit) : 1,
       currentPage: 1,
       total: count,
     };
 
-    let activity = await Activity.find({ id_paciente: id_paciente })
+    let activity = await Activity.find(query)
       .sort({ date: -1 })
-      .limit(2)
+      .limit(limit)
       .populate("bed")
       .exec();
-    count = await Activity.countDocuments({ id_paciente: id_paciente });
+    count = await Activity.countDocuments(query);
     activity = {
       activitys: [...activity],
-      totalPages: Math.ceil(count / 2),
+      totalPages: count > limit ? Math.ceil(count / limit) : 1,
       currentPage: 1,
       total: count,
     };
 
-    let diagnostic = await Diagnostic.find({ id_paciente: id_paciente })
+    let diagnostic = await Diagnostic.find(query)
       .sort({ date: -1 })
-      .limit(2)
+      .limit(limit)
       .populate("professional_name", "name")
       .exec();
-    count = await Diagnostic.countDocuments({ id_paciente: id_paciente });
+    count = await Diagnostic.countDocuments(query);
     diagnostic = {
       diagnostics: [...diagnostic],
-      totalPages: Math.ceil(count / 2),
+      totalPages: count > limit ? Math.ceil(count / limit) : 1,
       currentPage: 1,
       total: count,
     };

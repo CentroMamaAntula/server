@@ -33,7 +33,7 @@ exports.getClinicHistory = async (req, res) => {
     }
     let treatment = await Treatment.find(query)
       .sort({ date: -1 })
-      .limit(limit)
+      .limit(Number(limit))
       .populate("professional_name", "name")
       .exec();
     count = await Treatment.countDocuments(query);
@@ -46,7 +46,7 @@ exports.getClinicHistory = async (req, res) => {
 
     let historyCurrent = await HistoryCurrent.find(query)
       .sort({ date: -1 })
-      .limit(limit)
+      .limit(Number(limit))
       .populate("professional_name", "name")
       .exec();
     count = await HistoryCurrent.countDocuments(query);
@@ -59,7 +59,7 @@ exports.getClinicHistory = async (req, res) => {
 
     let physicalExam = await PhysicalExam.find(query)
       .sort({ date: -1 })
-      .limit(limit)
+      .limit(Number(limit))
       .populate("professional_name", "name")
       .exec();
     count = await PhysicalExam.countDocuments(query);
@@ -76,7 +76,7 @@ exports.getClinicHistory = async (req, res) => {
 
     let hisopado = await Hisopado.find(query)
       .sort({ date: -1 })
-      .limit(limit)
+      .limit(Number(limit))
       .exec();
     count = await Hisopado.countDocuments(query);
     hisopado = {
@@ -88,7 +88,7 @@ exports.getClinicHistory = async (req, res) => {
 
     let activity = await Activity.find(query)
       .sort({ date: -1 })
-      .limit(limit)
+      .limit(Number(limit))
       .populate("bed")
       .exec();
     count = await Activity.countDocuments(query);
@@ -101,7 +101,7 @@ exports.getClinicHistory = async (req, res) => {
 
     let diagnostic = await Diagnostic.find(query)
       .sort({ date: -1 })
-      .limit(limit)
+      .limit(Number(limit))
       .populate("professional_name", "name")
       .exec();
     count = await Diagnostic.countDocuments(query);

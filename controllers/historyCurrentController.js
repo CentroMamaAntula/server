@@ -27,7 +27,7 @@ exports.addHistoryCurrent = async (req, res) => {
 };
 
 exports.getHistoryCurrents = async (req, res) => {
-  const { id_paciente, limit = 3, page = 1 } = req.query;
+  const { id_paciente, limit = 5, page = 1 } = req.query;
   try {
     const paciente = await Paciente.findById(id_paciente);
     if (!paciente) {
